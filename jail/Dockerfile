@@ -2,7 +2,6 @@ FROM debian
 SHELL ["/bin/bash", "-c"]
 
 RUN mkdir /app
-COPY entry.sh /app
 COPY jail.sh /app
 
 RUN apt-get update
@@ -16,4 +15,4 @@ RUN cat ~/.ssh/id_ed25519.pub >> ~/.ssh/authorized_keys
 
 RUN bash /app/jail.sh
 
-CMD ["/bin/bash",  "/app/entry.sh"]
+CMD ["/bin/bash", "-c",  "/usr/sbin/sshd; ssh localhost -oStrictHostKeyChecking=no"]
