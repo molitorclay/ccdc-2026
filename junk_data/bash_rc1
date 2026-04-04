@@ -1,0 +1,150 @@
+ls
+pwd
+whoami
+cd /var/www
+ls
+cd hmtl
+cd html
+ls -la
+grep -R DB_ .
+cat .env
+cd /etc/nginx
+ls
+cat nginx.conf
+systemctl reload ngnix
+systemctl reload nginx
+cd /var/log/nginx
+tail -n 20 access.log
+tail -n 20 error.log
+grep POST access.log
+cd ~
+ssh admin@192.168.10.5
+exut
+exit
+ssh dev@192.168.10.20
+cd projects
+ls
+cd site
+git pull
+git pul
+git pull
+exit
+cd /etc/postfix
+ls
+cat main.cf
+postmap sasl_passwd
+systemctl restrat postfix
+systemctl restart postfix
+mailq
+cd /var/log
+grep postfix mail.log
+grep sasl mail.log
+cd ~
+sudo su
+cd /root
+ls
+cat .ssh/config
+ssh backup@192.168.10.30
+exit
+exit
+cd /opt
+ls
+cd scripts
+ls
+bash deploy.sh
+bash deply.sh
+bash deploy.sh
+cd /var/lib/mysql
+ls
+du -sh *
+cd ~
+mysql -u webapp -p
+exit
+mysql -u report -p
+exit
+cd /var/www/html
+grep -R login .
+grep -R auth .
+cd ~
+nc -zv 192.168.10.0 1-1024
+nc -zv 192.168.10.0 1-1024
+nc 192.168.10.25 25
+nc 192.168.10.25 25
+nc 192.168.10.50 22
+ls
+nano .env.local
+cat .env.local
+export APP_ENV=production
+export APP_KEY=ccdc-prod-91f2a7c
+cd /home/dev
+ls
+cd staging
+ls
+git status
+git pull
+cd ~
+scp backup.tar.gz backup@192.168.10.30:/data/
+scp backup.tar.gz backup@192.168.10.30:/data/
+ssh backup@192.168.10.30
+ls
+exit
+cd /tmp
+ls
+tar -xvf backup.tar.gz
+tar -xvf backup.tar.gz
+grep -R auth .
+rm -rf backup.tar.gz
+cd ~
+crontab -l
+crontab -e
+crontab -l
+cd /srv/ftp
+ls
+cat users.conf
+cd ~
+ssh deploy@192.168.10.15
+cd /var/www/staging
+git pull origin main
+git pull origin main
+exit
+cd /var/log
+tail -n 50 auth.log
+grep Accepted auth.log
+grep Failed auth.log
+last
+lastlog
+cd ~
+history | grep ssh
+clear
+cd /etc
+grep -R ccdc .
+cd ~
+mysql -u root -pccdcRoot#24
+show databases;
+use site_prod;
+select user,email from users limit 3;
+exit
+sshpass -p SecureOps!24 ssh admin@192.168.10.5
+sshpass -p ccdcDeploy@15 ssh deploy@192.168.10.15
+cd /mnt
+ls
+mount /dev/sdb1 /mnt/usb
+cd /mnt/usb
+ls
+cat data.txt
+cat data.txt
+umount /mnt/usb
+cd ~
+nc -lvnp 8081
+nc -lvnp 8081
+nc 192.168.10.12 3306
+cd /var/backups
+ls
+ls -lah
+tar -czf db_$(date +%F).tar.gz /var/lib/mysql
+scp db_2024-03-10.tar.gz admin@192.168.10.5:/tmp/
+rm db_2024-03-10.tar.gz
+cd ~
+ls
+pwd
+exit
