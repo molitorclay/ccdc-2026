@@ -1,0 +1,45 @@
+# /etc/ssh/sshd_config
+
+Subsystem sftp  internal-sftp
+Port 22
+Protocol 2
+
+# stop port tunneling
+X11Forwarding no
+AllowTcpForwarding no
+GatewayPorts no
+AllowAgentForwarding no
+PermitTunnel no
+
+# sshd logs
+SyslogFacility AUTH
+LogLevel VERBOSE
+
+AuthorizedKeysFile .ssh/authorized_keys /etc/ssh/authorized_keys
+PasswordAuthentication yes
+PermitEmptyPasswords no
+PermitRootLogin prohibit-password
+PubkeyAuthentication yes
+
+PermitTTY yes
+PrintMotd yes
+PrintLastLog yes
+
+# IPv4
+AddressFamily inet
+ListenAddress 0.0.0.0
+
+Banner /etc/motd
+
+
+########
+AcceptEnv ALL_IN LANGC LANG_ SSH_STATUS USER_PID 
+# ForceCommand logger
+
+Match User root
+    ChrootDirectory /
+# Drop other users into backup 
+# Backup is where systemd services should run
+Match User *
+    ChrootDirectory /backup
+

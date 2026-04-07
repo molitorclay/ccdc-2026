@@ -1,0 +1,4 @@
+# ~/.ssh/config
+
+Host *
+    SetEnv LANGC=C
