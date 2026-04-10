@@ -3,7 +3,12 @@
 # This can be used to hot swap services running betwean "/" and "$BACK_ENVup"
 # Files can also be transfered betwean directories, for example to restore a defaced website. 
 
-BACK_ENV=$BACK_ENVup
+BACK_ENV=/backup
+
+for cmd in rsync mount sed awk; do
+    command -v $cmd >/dev/null || { echo "$cmd missing"; exit 1; }
+done
+
 
 # Detect if the system is using BusyBox
 if mount --version 2>&1 | grep -q "BusyBox"; then
@@ -15,7 +20,7 @@ fi
 echo "Using mount command: $MOUNT_CMD"
 
 # Rsync host to chroot
-rsync -aAX / $BACK_ENV \
+rsync -aAX --delete / $BACK_ENV \
     --exclude=/dev/* \
     --exclude=/proc/* \
     --exclude=/sys/* \
@@ -28,11 +33,26 @@ rsync -aAX / $BACK_ENV \
     --exclude=/root/* \
     --exclude=/etc/ssh/sshd_config
 
+mkdir -p "$BACK_ENV"/{run,sys,dev,proc,dev/pts}
+
 # Bind necessary filesystems
 $MOUNT_CMD /run $BACK_ENV/run
 $MOUNT_CMD /sys $BACK_ENV/sys
 $MOUNT_CMD /dev $BACK_ENV/dev
 mount -t proc proc $BACK_ENV/proc
 mount -t devpts devpts $BACK_ENV/dev/pts
+
+
+# Redact and copy sensative files. IE don't copy shadow to /backup
+# We don't want to accidentially increase the attack surface.
+# shadow
+sed -E 's/^([^:]+):(\$[^:]+):/\1:$6$YhhlROCiWNSSifVP$Ag\/F4k3H45h.An07h3rBlU37e4mW1n\/E7YiFKAi7Rj88LWiwMqlis0x7icQrZqZgtyBSPJCcsHmEA2ffW\/DHgDjU6pcHld5MnU4K9ncFa0:/' /etc/shadow > $BACK_ENV/etc/shadow
+
+# passwd
+grep -v "clay" /etc/passwd | sed 's/coolshell/bash/g' > $BACK_ENV/etc/passwd
+
+# sshd 
+sed '/^########/,$d' /etc/ssh/sshd_config > $BACK_ENV/etc/ssh/sshd_config
+
 
 

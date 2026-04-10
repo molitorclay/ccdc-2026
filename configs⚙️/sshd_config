@@ -39,7 +39,6 @@ AcceptEnv ALL_IN LANGC LANG_ SSH_STATUS USER_PID
 Match User root
     ChrootDirectory /
 # Drop other users into backup environment.
-# Backup is where systemd services should run.
 Match User *
     ChrootDirectory /backup
 
