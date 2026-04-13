@@ -1,0 +1,395 @@
+# Nmap
+alert tcp $EXTERNAL_NET any -> $HOME_NET any (
+    msg:"LOCAL Possible Nmap SYN scan";
+    flow:stateless;
+    flags:S;
+    detection_filter:track by_src,count 20,seconds 5;
+    sid:1000001;
+    rev:1;
+)
+
+alert tcp $EXTERNAL_NET any -> $HOME_NET any (
+    msg:"LOCAL Possible Nmap NULL scan";
+    flow:stateless;
+    flags:0;
+    detection_filter:track by_src,count 10,seconds 5;
+    sid:1000002;
+    rev:1;
+)
+
+alert tcp $EXTERNAL_NET any -> $HOME_NET any (
+    msg:"LOCAL Possible Nmap FIN scan";
+    flow:stateless;
+    flags:F;
+    detection_filter:track by_src,count 10,seconds 5;
+    sid:1000003;
+    rev:1;
+)
+
+alert tcp $EXTERNAL_NET any -> $HOME_NET any (
+    msg:"LOCAL Possible Nmap Xmas scan";
+    flow:stateless;
+    flags:FPU;
+    detection_filter:track by_src,count 10,seconds 5;
+    sid:1000004;
+    rev:1;
+)
+
+alert icmp $EXTERNAL_NET any -> $HOME_NET any (
+    msg:"LOCAL Possible Nmap ICMP ping sweep";
+    itype:=8;
+    icode:=0;
+    detection_filter:track by_src,count 10,seconds 5;
+    sid:1000005;
+    rev:1;
+)
+
+# -------------------------------
+# SSH brute force / repeated login attempts
+# -------------------------------
+
+alert tcp $EXTERNAL_NET any -> $HOME_NET 22 (
+    msg:"LOCAL Possible SSH brute force";
+    flow:stateless;
+    flags:S;
+    detection_filter:track by_src,count 15,seconds 60;
+    classtype:attempted-user;
+    sid:1000201;
+    rev:1;
+)
+
+# -------------------------------
+# Web crawler / scanner user-agents
+# -------------------------------
+
+alert tcp $EXTERNAL_NET any -> $HOME_NET any (
+    msg:"LOCAL Web scanner user-agent curl";
+    flow:to_server,established;
+    service:http;
+    http_header:field user-agent;
+    content:"curl/"; nocase;
+    classtype:web-application-attack;
+    sid:1000202;
+    rev:1;
+)
+
+alert tcp $EXTERNAL_NET any -> $HOME_NET any (
+    msg:"LOCAL Web scanner user-agent Wget";
+    flow:to_server,established;
+    service:http;
+    http_header:field user-agent;
+    content:"Wget/"; nocase;
+    classtype:web-application-attack;
+    sid:1000203;
+    rev:1;
+)
+
+alert tcp $EXTERNAL_NET any -> $HOME_NET any (
+    msg:"LOCAL Web scanner user-agent python-requests";
+    flow:to_server,established;
+    service:http;
+    http_header:field user-agent;
+    content:"python-requests"; nocase;
+    classtype:web-application-attack;
+    sid:1000204;
+    rev:1;
+)
+
+alert tcp $EXTERNAL_NET any -> $HOME_NET any (
+    msg:"LOCAL Web scanner user-agent Go-http-client";
+    flow:to_server,established;
+    service:http;
+    http_header:field user-agent;
+    content:"Go-http-client"; nocase;
+    classtype:web-application-attack;
+    sid:1000205;
+    rev:1;
+)
+
+alert tcp $EXTERNAL_NET any -> $HOME_NET any (
+    msg:"LOCAL Web scanner user-agent sqlmap";
+    flow:to_server,established;
+    service:http;
+    http_header:field user-agent;
+    content:"sqlmap"; nocase;
+    classtype:web-application-attack;
+    sid:1000206;
+    rev:1;
+)
+
+alert tcp $EXTERNAL_NET any -> $HOME_NET any (
+    msg:"LOCAL Web scanner user-agent Nikto";
+    flow:to_server,established;
+    service:http;
+    http_header:field user-agent;
+    content:"Nikto"; nocase;
+    classtype:web-application-attack;
+    sid:1000207;
+    rev:1;
+)
+
+alert tcp $EXTERNAL_NET any -> $HOME_NET any (
+    msg:"LOCAL Web scanner user-agent gobuster";
+    flow:to_server,established;
+    service:http;
+    http_header:field user-agent;
+    content:"gobuster"; nocase;
+    classtype:web-application-attack;
+    sid:1000208;
+    rev:1;
+)
+
+alert tcp $EXTERNAL_NET any -> $HOME_NET any (
+    msg:"LOCAL Web scanner user-agent feroxbuster";
+    flow:to_server,established;
+    service:http;
+    http_header:field user-agent;
+    content:"feroxbuster"; nocase;
+    classtype:web-application-attack;
+    sid:1000209;
+    rev:1;
+)
+
+alert tcp $EXTERNAL_NET any -> $HOME_NET any (
+    msg:"LOCAL Web scanner user-agent ffuf";
+    flow:to_server,established;
+    service:http;
+    http_header:field user-agent;
+    content:"ffuf"; nocase;
+    classtype:web-application-attack;
+    sid:1000210;
+    rev:1;
+)
+
+# -------------------------------
+# Common web recon / exploit path probes
+# -------------------------------
+
+alert tcp $EXTERNAL_NET any -> $HOME_NET any (
+    msg:"LOCAL Web recon probe .git/config";
+    flow:to_server,established;
+    service:http;
+    http_uri;
+    content:"/.git/config"; nocase;
+    classtype:web-application-attack;
+    sid:1000211;
+    rev:1;
+)
+
+alert tcp $EXTERNAL_NET any -> $HOME_NET any (
+    msg:"LOCAL Web recon probe .env";
+    flow:to_server,established;
+    service:http;
+    http_uri;
+    content:"/.env"; nocase;
+    classtype:web-application-attack;
+    sid:1000212;
+    rev:1;
+)
+
+alert tcp $EXTERNAL_NET any -> $HOME_NET any (
+    msg:"LOCAL Web recon probe phpMyAdmin";
+    flow:to_server,established;
+    service:http;
+    http_uri;
+    content:"/phpmyadmin"; nocase;
+    classtype:web-application-attack;
+    sid:1000213;
+    rev:1;
+)
+
+alert tcp $EXTERNAL_NET any -> $HOME_NET any (
+    msg:"LOCAL Web recon probe Tomcat manager";
+    flow:to_server,established;
+    service:http;
+    http_uri;
+    content:"/manager/html"; nocase;
+    classtype:web-application-attack;
+    sid:1000214;
+    rev:1;
+)
+
+alert tcp $EXTERNAL_NET any -> $HOME_NET any (
+    msg:"LOCAL Web recon probe wp-login";
+    flow:to_server,established;
+    service:http;
+    http_uri;
+    content:"/wp-login.php"; nocase;
+    classtype:web-application-attack;
+    sid:1000215;
+    rev:1;
+)
+
+# -------------------------------
+# Possible Zerologon / Netlogon abuse
+# Heuristic only; tighten to DC IPs if you can
+# -------------------------------
+
+alert tcp $EXTERNAL_NET any -> $HOME_NET 445 (
+    msg:"LOCAL Possible Zerologon or Netlogon abuse burst (heuristic)";
+    flow:stateless;
+    flags:S;
+    detection_filter:track by_src,count 20,seconds 10;
+    classtype:attempted-admin;
+    sid:1000216;
+    rev:1;
+)
+
+# -------------------------------
+# Possible EternalBlue / SMB exploit activity
+# Heuristic only; much better if you scope to DCs or SMB servers
+# -------------------------------
+
+alert tcp $EXTERNAL_NET any -> $HOME_NET 445 (
+    msg:"LOCAL Possible SMB exploit traffic SMB1";
+    flow:to_server,established;
+    content:"|FF 53 4D 42|"; offset:0; depth:4;
+    detection_filter:track by_src,count 5,seconds 30;
+    classtype:attempted-admin;
+    sid:1000217;
+    rev:1;
+)
+
+alert tcp $EXTERNAL_NET any -> $HOME_NET 445 (
+    msg:"LOCAL Possible SMB exploit traffic SMB2/3";
+    flow:to_server,established;
+    content:"|FE 53 4D 42|"; offset:0; depth:4;
+    detection_filter:track by_src,count 5,seconds 30;
+    classtype:attempted-admin;
+    sid:1000218;
+    rev:1;
+)
+
+# -------------------------------
+# Domain hash stealing / relay indicators
+# -------------------------------
+
+alert tcp $HOME_NET any -> $EXTERNAL_NET [139,445] (
+    msg:"LOCAL Outbound SMB/NetBIOS to external host possible NTLM hash leak or relay";
+    flow:to_server,established;
+    classtype:policy-violation;
+    sid:1000219;
+    rev:1;
+)
+
+alert tcp $HOME_NET any -> $EXTERNAL_NET any (
+    msg:"LOCAL Outbound HTTP NTLM auth to external host";
+    flow:to_server,established;
+    service:http;
+    http_header:field authorization;
+    content:"NTLM "; nocase;
+    classtype:policy-violation;
+    sid:1000220;
+    rev:1;
+)
+
+alert tcp $HOME_NET any -> $EXTERNAL_NET any (
+    msg:"LOCAL Outbound HTTP proxy NTLM auth to external host";
+    flow:to_server,established;
+    service:http;
+    http_header:field proxy-authorization;
+    content:"NTLM "; nocase;
+    classtype:policy-violation;
+    sid:1000221;
+    rev:1;
+)
+
+alert tcp $HOME_NET any -> $EXTERNAL_NET any (
+    msg:"LOCAL Outbound WebDAV MiniRedir traffic possible coerced auth";
+    flow:to_server,established;
+    service:http;
+    http_header:field user-agent;
+    content:"Microsoft-WebDAV-MiniRedir"; nocase;
+    classtype:policy-violation;
+    sid:1000222;
+    rev:1;
+)
+
+# -------------------------------
+# Netcat / ncat / common bind-shell listeners
+# -------------------------------
+
+alert tcp $EXTERNAL_NET any -> $HOME_NET [1337,2222,4444,4445,5555,6666,6969,31337] (
+    msg:"LOCAL External connection to common bind-shell port";
+    flow:stateless;
+    flags:S;
+    classtype:shellcode-detect;
+    sid:1000223;
+    rev:1;
+)
+
+alert tcp $HOME_NET any -> $EXTERNAL_NET any (
+    msg:"LOCAL Possible nc/ncat/chisel/ligolo/sliver tool fetch by URI";
+    flow:to_server,established;
+    service:http;
+    http_uri;
+    pcre:"/(nc\.exe|ncat\.exe|netcat|chisel|ligolo|sliver)/i";
+    classtype:misc-activity;
+    sid:1000224;
+    rev:1;
+)
+
+# -------------------------------
+# Popular red-team tool fetches by URI
+# -------------------------------
+
+alert tcp $HOME_NET any -> $EXTERNAL_NET any (
+    msg:"LOCAL Possible offensive tool fetch by URI";
+    flow:to_server,established;
+    service:http;
+    http_uri;
+    pcre:"/(mimikatz|rubeus|sharphound|bloodhound|seatbelt|safetykatz|winpeas|linpeas|kerbrute|impacket)/i";
+    classtype:misc-activity;
+    sid:1000225;
+    rev:1;
+)
+
+# -------------------------------
+# DNS exfiltration heuristics
+# -------------------------------
+
+alert udp $HOME_NET any -> $EXTERNAL_NET 53 (
+    msg:"LOCAL Possible DNS exfiltration large outbound UDP query burst";
+    dsize:>180;
+    detection_filter:track by_src,count 20,seconds 60;
+    classtype:misc-activity;
+    sid:1000226;
+    rev:1;
+)
+
+alert tcp $HOME_NET any -> $EXTERNAL_NET 53 (
+    msg:"LOCAL Possible DNS exfiltration over TCP";
+    flow:to_server,established;
+    dsize:>180;
+    detection_filter:track by_src,count 10,seconds 60;
+    classtype:misc-activity;
+    sid:1000227;
+    rev:1;
+)
+
+# -------------------------------
+# Web shell / command execution indicators in HTTP requests
+# -------------------------------
+
+alert tcp $EXTERNAL_NET any -> $HOME_NET any (
+    msg:"LOCAL Possible webshell or command exec parameter";
+    flow:to_server,established;
+    service:http;
+    http_uri;
+    pcre:"/(\?|&)(cmd|exec|command|shell|powershell|ps)=/i";
+    classtype:web-application-attack;
+    sid:1000228;
+    rev:1;
+)
+
+alert tcp $EXTERNAL_NET any -> $HOME_NET any (
+    msg:"LOCAL Possible PowerShell encoded command in HTTP body";
+    flow:to_server,established;
+    service:http;
+    http_client_body;
+    content:"powershell"; nocase;
+    pcre:"/-(enc|encodedcommand)\b/i";
+    classtype:web-application-attack;
+    sid:1000229;
+    rev:1;
+)
