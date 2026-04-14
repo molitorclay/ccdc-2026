@@ -48,6 +48,3 @@ JSON file is to be easily parsed by the AD-Hardening script developed by BYU. Co
 
 ### ports.json
 JSON file is to be easily parsed by the AD-Hardening script developed by BYU. Contains common ports with their description, port number, status, and protocol type.
-
-### splunk.ps1
-Splunk installation and configuration script developed by BYU. Used by the AD-Hardening script.
