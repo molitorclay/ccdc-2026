@@ -64,7 +64,7 @@ w
 becho "SSH authorized keys"
 find /home -name "authorized_keys" -exec cat {} \; 2>/dev/null
 
-becho "SUID files (check against gtfobins)"
+becho "SUID files (check against gtfobins.org)"
 find / -perm -4000 -type f 2>/dev/null
 
 becho "== Login history =="
