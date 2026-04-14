@@ -1,31 +1,34 @@
 # Western Washington University's repository for CCDC 2026
 
-## [Clix](https://github.com/molitorclay/ccdc-2026/tree/main/clix)
+## [Clix](./clix)
 Nix scripts used for Nix systems
 
-## [Configs](https://github.com/molitorclay/ccdc-2026/tree/main/configs⚙%EF%B8%8F)
+## [Configs](./configs⚙️)
 Linux configuration files
 
-## [Coolshell](https://github.com/molitorclay/ccdc-2026/tree/main/coolshell)
+## [Coolshell](./coolshell)
 Funny jail for red teamers
 
-## [Firewall](https://github.com/molitorclay/ccdc-2026/tree/main/firewall🔥🧱)
+## [Firewall](./firewall🔥🧱)
 Firewall, Router, and IDS configuration/installation
 
-## [Hardening](https://github.com/molitorclay/ccdc-2026/tree/main/hardening🦾)
+## [Hardening](./hardening🦾)
 Linux hardening scripts
 
-## [Junk data](https://github.com/molitorclay/ccdc-2026/tree/main/junk_data)
+## [Junk data](./junk_data)
 Self-explanatory, used by scripts and executables for *advanced* functionality
 
-## [Log](https://github.com/molitorclay/ccdc-2026/tree/main/log🪵)
+## [Log](./log🪵)
 Log configuration scripts
 
-## [Recon](https://github.com/molitorclay/ccdc-2026/tree/main/recon🕵%EF%B8%8F)
+## [Recon](./recon🕵️)
 Scanning the network environment for inventory
 
-## [Utils](https://github.com/molitorclay/ccdc-2026/tree/main/utils🛠%EF%B8%8F)
+## [Utils](./utils🛠️)
 Backup and misc. scripts
 
-## [Windows](https://github.com/molitorclay/ccdc-2026/tree/main/windows🪟)
+## [Windows](./windows🪟)
 Windows Hardening and monitoring scripts
+
+## [SSH Management](./ssh_mgmt)
+SSH unix password management script
