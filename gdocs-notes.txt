@@ -1,0 +1,98 @@
+Initial Check: 
+cat /etc/passwd | grep -v -E 'nologin$|false$' X
+/etc/shadow X
+/etc/hosts X
+/etc/inittab X
+netstat -antp(d) X
+ps aux and pstree X
+Rc scripts:
+	/etc/profile*
+	.*sh_rc
+	/etc/bash*
+
+Initial Actions: 
+passwd
+backup /etc
+backup var and other services
+remove history
+edit getty to launch bash
+Make sudo require password
+remove sudo/wheel users.
+
+Run scripts remotely:
+ssh root@192.168.1.20 'bash -s' < script.sh
+
+
+sshd:
+AuthorizedKeysFile .ssh/authorized_keys /etc/ssh/authorized_keys
+
+Logging:
+    authd
+    screens - too hard 🥲
+    script 
+    evil bash
+    pspy
+    history -a
+
+
+Fake hashes:
+$6$YhhlROCiWNSSifVP$F4k3.h45h/4n07h3r_BlU3_734m.w1n,73n_7h0u54nd_53rv1c35/571llrunn1nGXyZ9/AbCdEfIlGh
+$6$YhhlROCiWNSSifVP$F4k3h45h.4n07h3rBlU3734mw1n/73n7h0u54nd53rv1c35upXyZ9AbCdEfGhIjKlOpQrStUvWxYz01
+
+
+
+Sshd_config jail:
+Match User clay
+ChrootDirectory /
+Match User root
+ChrootDirectory /
+Match User *
+ChrootDirectory /back
+
+Snort & Fail2Ban:
+Configure snort to listen on server range
+Make a list of rules 
+similar to: https://github.com/mandiant/red_team_tool_countermeasures/blob/master/all-snort.rules
+Configure Fail2Ban to filter snort
+Create /etc/fail2ban/filter.d/snort.conf:
+failregex = ^.*?\s+\[Drop\s+Rules\s+ID\s+.*?\]\s+.*?\s+->\s+.*?\s+<HOST>
+                  ^.*?\s+\[\d+:\d+:\d+\]\s+.*?\s+->\s+.*?\s+<HOST>
+ignoreregex =
+Note: The failregex must match your specific alert_fast log format.
+Create Fail2Ban jail
+create/edit /etc/fail2ban/jail.local
+[snort-linear] enabled = true port = all filter = snort logpath = /var/log/snort/alert_fast maxretry = 1 bantime = 3600 action = iptables-allports[name=Snort]
+Sudo systemctl restart fail2ban
+Testing with ICMP traffic
+alert icmp any any -> $HOME_NET any (msg:"ICMP Ping Detected"; sid:1000001; rev:1;)
+
+SSH
+sshd_config:
+AuthorizedKeysFile .ssh/authorized_keys /etc/ssh/authorized_keys
+PermitRootLogin prohibit-password
+
+PasswordAuthentication yes  #no if not scored
+PermitEmptyPasswords no
+
+AllowTcpForwarding no  
+X11Forwarding no 
+GatewayPorts no
+PermitTunnel no
+
+
+# For logging
+PermitUserEnvironment "LANGC"
+
+
+
+Logging:
+
+screen -S "$(whoami):$(tty)"  
+
+# Set up logging in ssh
+ForceCommand screen -S "$(whoami):$(tty | sed 's/\//./g')"
+mkdir /home/*/.screen
+
+
+URLS 
+https://gtfobins.org
