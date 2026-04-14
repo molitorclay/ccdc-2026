@@ -1,0 +1,20 @@
+# --- Sensitive competition data ---
+# These files contain credentials, keys, and network topology.
+# None of them should ever be committed.
+targets.txt
+data/
+snapshots/
+
+# --- Python ---
+.venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+.pytest_cache/
+
+# --- I know, I vibe coded everything... ---
+.codex
+.claude
+
