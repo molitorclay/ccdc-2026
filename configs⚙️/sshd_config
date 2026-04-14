@@ -38,7 +38,6 @@ AcceptEnv ALL_IN LANGC LANG_ SSH_STATUS USER_PID
 
 Match User root
     ChrootDirectory /
-# Drop other users into backup environment.
 Match User *
-    ChrootDirectory /backup
+    ChrootDirectory /
 

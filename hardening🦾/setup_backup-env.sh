@@ -30,8 +30,7 @@ rsync -aAX --delete / $BACK_ENV \
     --exclude=/etc/passwd \
     --exclude=/etc/shadow \
     --exclude=/home/* \
-    --exclude=/root/* \
-    --exclude=/etc/ssh/sshd_config
+    --exclude=/root/* 
 
 mkdir -p "$BACK_ENV"/{run,sys,dev,proc,dev/pts}
 
@@ -41,18 +40,4 @@ $MOUNT_CMD /sys $BACK_ENV/sys
 $MOUNT_CMD /dev $BACK_ENV/dev
 mount -t proc proc $BACK_ENV/proc
 mount -t devpts devpts $BACK_ENV/dev/pts
-
-
-# Redact and copy sensative files. IE don't copy shadow to /backup
-# We don't want to accidentially increase the attack surface.
-# shadow
-sed -E 's/^([^:]+):(\$[^:]+):/\1:$6$YhhlROCiWNSSifVP$Ag\/F4k3H45h.An07h3rBlU37e4mW1n\/E7YiFKAi7Rj88LWiwMqlis0x7icQrZqZgtyBSPJCcsHmEA2ffW\/DHgDjU6pcHld5MnU4K9ncFa0:/' /etc/shadow > $BACK_ENV/etc/shadow
-
-# passwd
-grep -v "clay" /etc/passwd | sed 's/coolshell/bash/g' > $BACK_ENV/etc/passwd
-
-# sshd 
-sed '/^########/,$d' /etc/ssh/sshd_config > $BACK_ENV/etc/ssh/sshd_config
-
-
 
